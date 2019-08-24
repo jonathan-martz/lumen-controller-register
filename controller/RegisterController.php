@@ -17,9 +17,39 @@ class RegisterController extends Controller
     {
         $validation = $this->validate($request, [
             'username' => 'required',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
+            'email' => 'required|min:8|email'
         ]);
 
+        $username = DB::connection('mysql.read')
+            ->table('users')
+            ->where('username', '=', $request->input('username'));
 
+        $email = DB::connection('mysql.read')
+            ->table('users')
+            ->where('email', '=', $request->input('email'));
+
+        if ($username->count() == 0 || $email->count() == 0) {
+            $created = DB::connection('mysql.write')
+                ->table('users')
+                ->insert([
+                    'username' => $request->input('username'),
+                    'username_hash' => sha1($request->input('username')),
+                    'password' => $request->input('password'),
+                    'email' => $request->input('email')
+                ]);
+
+            if ($created) {
+                $this->addMessage('success', 'User successfull created');
+            } else {
+                $this->addMessage('error', 'User creation failed');
+            }
+        } else if ($username->count() !== 0) {
+            $this->addMessage('error', 'User with username already exists');
+        } else {
+            $this->addMessage('error', 'User with email already exists');
+        }
+
+        return $this->getResponse();
     }
 }
