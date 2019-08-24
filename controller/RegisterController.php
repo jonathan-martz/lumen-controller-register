@@ -29,7 +29,7 @@ class RegisterController extends Controller
             ->table('users')
             ->where('email', '=', $request->input('email'));
 
-        if ($username->count() == 0 || $email->count() == 0) {
+        if ($username->count() == 0 && $email->count() == 0) {
             $created = DB::connection('mysql.write')
                 ->table('users')
                 ->insert([
