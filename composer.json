@@ -1,5 +1,5 @@
 {
-  "name": "mkaaaaaaay/lumen-register-controller",
+  "name": "jonathan-martz/lumen-register-controller",
   "description": "Php Lumen Register Controller",
   "require": {
     "php": "^7.1",
