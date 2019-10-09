@@ -21,17 +21,14 @@ class RegisterController extends Controller
             'email' => 'required|min:8|email'
         ]);
 
-        $username = DB::connection('mysql.read')
-            ->table('users')
+        $username = DB::table('users')
             ->where('username', '=', $request->input('username'));
 
-        $email = DB::connection('mysql.read')
-            ->table('users')
+        $email = DB::table('users')
             ->where('email', '=', $request->input('email'));
 
         if ($username->count() == 0 && $email->count() == 0) {
-            $created = DB::connection('mysql.write')
-                ->table('users')
+            $created = DB::table('users')
                 ->insert([
                     'username' => $request->input('username'),
                     'username_hash' => sha1($request->input('username')),
