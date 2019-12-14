@@ -32,7 +32,7 @@ class RegisterController extends Controller
                 ->insert([
                     'username' => $request->input('username'),
                     'username_hash' => sha1($request->input('username')),
-                    'password' => $request->input('password'),
+                    'password' => password_hash($request->input('password'),  PASSWORD_BCRYPT),
                     'email' => $request->input('email')
                 ]);
 
