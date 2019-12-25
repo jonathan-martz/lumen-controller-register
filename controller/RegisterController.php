@@ -37,7 +37,7 @@ class RegisterController extends Controller
                 ]);
 
             if ($created) {
-                $this->addMessage('success', 'User successfull created');
+                $this->addMessage('success', 'User successfull created. Please check your mails to active the User.');
             } else {
                 $this->addMessage('error', 'User creation failed');
             }
