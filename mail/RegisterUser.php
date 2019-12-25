@@ -11,6 +11,10 @@ class RegisterUser extends Mailable
     use Queueable, SerializesModels;
 
     /**
+     * @todo add bootstrap.css or spectre.css for mails ?
+     */
+
+    /**
      * @var string
      */
     private $email;
