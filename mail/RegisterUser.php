@@ -45,7 +45,6 @@ class RegisterUser extends Mailable
         $this->email = $email;
     }
 
-
     /**
      * Build the message.
      *
@@ -54,6 +53,11 @@ class RegisterUser extends Mailable
     public function build()
     {
         return $this->from(config('mail.from'))
-            ->view('emails::register-user');
+            ->view('emails::register-user')
+            ->with([
+                'email' => $this->email,
+                'token' => $this->token,
+                'username' => $this->username,
+            ]);
     }
 }
