@@ -56,7 +56,7 @@ class RegisterController extends Controller
     {
         $token = bin2hex(openssl_random_pseudo_bytes(256));
 
-        Mail::to($email)->send(new RegisterUser($username, $token));
+        Mail::to($email)->send(new RegisterUser($username, $token, $email));
 
 
         // send mail with link
