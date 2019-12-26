@@ -56,11 +56,14 @@ class RegisterController extends Controller
     {
         $token = bin2hex(openssl_random_pseudo_bytes(256));
 
+        DB::table('user_activate_token')->insert(
+            [
+                'userid' => $this->request->user()->getAuthIdentifier(),
+                'token' => $token,
+                'date' => strtotime('now')
+            ]
+        );
+
         Mail::to($email)->send(new RegisterUser($username, $token, $email));
-
-
-        // send mail with link
-        // create controller for activation
-
     }
 }
