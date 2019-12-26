@@ -39,7 +39,7 @@ class RegisterController extends Controller
 
             if ($created) {
                 $this->addMessage('success', 'User successfull created. Please check your mails to active the User.');
-                $this->sendMail($username, $email);
+                $this->sendMail($this->request->input('username'), $this->request->input('email'));
             } else {
                 $this->addMessage('error', 'User creation failed');
             }

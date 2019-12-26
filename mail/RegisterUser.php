@@ -39,6 +39,6 @@ class RegisterUser extends Mailable
     public function build()
     {
         return $this->from(config('mail.from'))
-            ->view('register-user');
+            ->view('emails::register-user');
     }
 }
