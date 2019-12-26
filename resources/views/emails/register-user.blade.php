@@ -5,7 +5,7 @@
     <title>Register User Activation Email - hetzner.jmartz.de</title>
 </head>
 <body>
-@component('header')
+    @component('hetzner::header')
     <main>
         <p><strong>Register User Activation Email</strong></p>
         <p>
@@ -16,6 +16,6 @@
             your email Account of {{ $email }} on {{ config('APP_URL')  }}.<br>
         </p>
     </main>
-    @component('footer')
+    @component('hetzner::footer')
 </body>
 </html>
