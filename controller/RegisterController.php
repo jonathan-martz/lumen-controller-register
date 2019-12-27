@@ -56,9 +56,13 @@ class RegisterController extends Controller
     {
         $token = bin2hex(openssl_random_pseudo_bytes(256));
 
+        $user = DB::table('users')
+            ->where('username', '=', $username)
+            ->where('username_hash', '=', sha1($username))->get()->first();
+
         DB::table('user_activate_token')->insert(
             [
-                'userid' => $this->request->user()->getAuthIdentifier(),
+                'userid' => $user->id,
                 'token' => $token,
                 'date' => strtotime('now')
             ]
