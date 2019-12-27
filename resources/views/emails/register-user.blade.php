@@ -7,7 +7,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
-@component('hetzner::header') @endcomponent
+@component('general::header') @endcomponent
 <main>
     <p><strong>Register User Activation Email</strong></p>
     <p>
@@ -20,6 +20,6 @@
         your email Account of {{ $email }} on <a href="https://hetzner.jmartz.de/">hetzner.jmartz.de</a>.<br>
     </p>
 </main>
-@component('hetzner::footer') @endcomponent
+@component('general::footer') @endcomponent
 </body>
 </html>
