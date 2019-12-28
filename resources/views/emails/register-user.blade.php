@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
+<!--| TODO fix urls depend on base url |-->
 <body>
 @component('general::header') @endcomponent
 <main>
