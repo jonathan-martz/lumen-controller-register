@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\RegisterUser;
 use http\Env\Response;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 
 class RegisterController extends Controller
 {
@@ -29,19 +28,31 @@ class RegisterController extends Controller
             ->where('email', '=', $this->request->input('email'));
 
         if ($username->count() == 0 && $email->count() == 0) {
-            $created = DB::table('users')
-                ->insert([
-                    'username' => $this->request->input('username'),
-                    'username_hash' => sha1($this->request->input('username')),
-                    'password' => password_hash($this->request->input('password'), PASSWORD_BCRYPT),
-                    'email' => $this->request->input('email')
-                ]);
 
-            if ($created) {
-                $this->addMessage('success', 'User successfull created. Please check your mails to active the User.');
-                $this->sendMail($this->request->input('username'), $this->request->input('email'));
+            if (Schema::hasTable('user_role')) {
+                $role = DB::table('user_role')->where('name', '=', 'user')->first();
+
+                if ($role->count() !== 0) {
+                    $created = DB::table('users')
+                        ->insert([
+                            'username' => $this->request->input('username'),
+                            'username_hash' => sha1($this->request->input('username')),
+                            'password' => password_hash($this->request->input('password'), PASSWORD_BCRYPT),
+                            'email' => $this->request->input('email'),
+                            'RID' => $role->id
+                        ]);
+
+                    if ($created) {
+                        $this->addMessage('success', 'User successfull created. Please check your mails to active the User.');
+                        $this->sendMail($this->request->input('username'), $this->request->input('email'));
+                    } else {
+                        $this->addMessage('error', 'User creation failed');
+                    }
+                } else {
+                    $this->addMessage('error', 'User Role User doesnt exists, please contact the Admin with this message.');
+                }
             } else {
-                $this->addMessage('error', 'User creation failed');
+                $this->addMessage('error', 'User Role Table doesnt exists, please contact the Admin with this message.');
             }
         } else if ($username->count() !== 0) {
             $this->addMessage('error', 'User with username already exists');
