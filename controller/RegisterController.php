@@ -30,7 +30,7 @@ class RegisterController extends Controller
         if ($username->count() == 0 && $email->count() == 0) {
 
             if (Schema::hasTable('user_role')) {
-                $role = DB::table('user_role')->where('name', '=', 'user')->first();
+                $role = DB::table('user_role')->where('name', '=', 'user');
 
                 if ($role->count() !== 0) {
                     $created = DB::table('users')
@@ -39,7 +39,7 @@ class RegisterController extends Controller
                             'username_hash' => sha1($this->request->input('username')),
                             'password' => password_hash($this->request->input('password'), PASSWORD_BCRYPT),
                             'email' => $this->request->input('email'),
-                            'RID' => $role->id
+                            'RID' => $role->first()->id
                         ]);
 
                     if ($created) {
