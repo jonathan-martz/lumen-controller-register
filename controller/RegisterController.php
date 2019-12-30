@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\RegisterUser;
-use http\Env\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 
 class RegisterController extends Controller
 {
-    /**
-     * @return Response
-     */
     public function user()
     {
         $validation = $this->validate($this->request, [
@@ -28,7 +22,6 @@ class RegisterController extends Controller
             ->where('email', '=', $this->request->input('email'));
 
         if ($username->count() == 0 && $email->count() == 0) {
-
             if (Schema::hasTable('user_role')) {
                 $role = DB::table('user_role')->where('name', '=', 'user');
 
@@ -43,8 +36,11 @@ class RegisterController extends Controller
                         ]);
 
                     if ($created) {
-                        $this->addMessage('success', 'User successfull created. Please check your mails to active the User.');
-                        $this->sendMail($this->request->input('username'), $this->request->input('email'));
+                        if (Schema::hasTable('user_activate_token')) {
+                            $this->addMessage('success', 'User successfull created. Please check your mails to active the User.');
+                        } else {
+                            $this->addMessage('success', 'User successfull created. Please contact an Admin to activate your Account.');
+                        }
                     } else {
                         $this->addMessage('error', 'User creation failed');
                     }
@@ -61,24 +57,5 @@ class RegisterController extends Controller
         }
 
         return $this->getResponse();
-    }
-
-    public function sendMail($username, $email)
-    {
-        $token = bin2hex(openssl_random_pseudo_bytes(256));
-
-        $user = DB::table('users')
-            ->where('username', '=', $username)
-            ->where('username_hash', '=', sha1($username))->get()->first();
-
-        DB::table('user_activate_token')->insert(
-            [
-                'userid' => $user->id,
-                'token' => $token,
-                'date' => strtotime('now')
-            ]
-        );
-
-        Mail::to($email)->send(new RegisterUser($username, $token, $email));
     }
 }
